@@ -18,16 +18,16 @@ const store = new fromStore.Store(
   }
 );
 
-console.log('🧗‍', store.value);
-
 button.addEventListener(
   'click',
   () => {
     if (!input.value.trim()) return;
 
     const payload = { label: input.value, complete: false };
-
-    console.log(payload);
+    store.dispatch({
+      type: 'ADD_TODO',
+      payload
+    });
 
     input.value = '';
   },
