@@ -5,6 +5,7 @@ export class Store {
 
 
   constructor(reducers = {}, initialState = {}) {
+    this.reducers = reducers;
     this.state = initialState;
   }
 
@@ -13,16 +14,28 @@ export class Store {
   }
 
   dispatch(objAction) {
-    console.log('11', this.state);
-    /*
-    this.state = {
-      ...this.state,
-      todos: [...this.state.todos, objAction.payload]
-    };
-    */
-    this.state = {
-      todos: [...this.state.todos, objAction.payload]
-    };
-    console.log('22', this.state);
+    debugger;
+    this.reduce(this.state, objAction);
+    // console.log('11', this.state);
+    // /*
+    // this.state = {
+    //   ...this.state,
+    //   todos: [...this.state.todos, objAction.payload]
+    // };
+    // */
+    // this.state = {
+    //   todos: [...this.state.todos, objAction.payload]
+    // };
+    // console.log('22', this.state);
+  }
+
+  private reduce(ste, axn) {
+    const newState = {};
+    for (const prop in this.reducers) {
+      // ? newState.todos = this.reducers.todos();
+      newState[prop] = this.reducers[prop](ste, axn);
+    }
+    console.log('from reduce', newState);
+    return newState;
   }
 }

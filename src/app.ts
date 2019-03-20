@@ -5,29 +5,26 @@ const input = document.querySelector('input') as HTMLInputElement;
 const button = document.querySelector('button') as HTMLButtonElement;
 const destroy = document.querySelector('.unsubscribe') as HTMLButtonElement;
 const todoList = document.querySelector('.todos') as HTMLLIElement;
+debugger;
+const reducers = {
+  todos: fromStore.reducer
+};
 
-const store = new fromStore.Store(
-  {},
-  {
-    todos: [
-      {
-        label: 'Eat 🍕🍕🍕',
-        completed: false
-      }
-    ]
-  }
-);
+const store = new fromStore.Store(reducers);
+
 
 button.addEventListener(
   'click',
   () => {
     if (!input.value.trim()) return;
-
     const payload = { label: input.value, complete: false };
+    // console.log('11', store.value);
     store.dispatch({
       type: 'ADD_TODO',
       payload
     });
+    console.log('22', store.value);
+
 
     input.value = '';
   },
