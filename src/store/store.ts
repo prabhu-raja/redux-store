@@ -13,9 +13,9 @@ export class Store {
     return this.state;
   }
 
-  dispatch(objAction) {
+  dispatch(action) {
     debugger;
-    this.reduce(this.state, objAction);
+    this.reduce(this.state, action);
     // console.log('11', this.state);
     // /*
     // this.state = {
@@ -29,11 +29,11 @@ export class Store {
     // console.log('22', this.state);
   }
 
-  private reduce(ste, axn) {
+  private reduce(state, action) {
     const newState = {};
     for (const prop in this.reducers) {
       // ? newState.todos = this.reducers.todos();
-      newState[prop] = this.reducers[prop](ste, axn);
+      newState[prop] = this.reducers[prop](state, action);
     }
     console.log('from reduce', newState);
     return newState;
