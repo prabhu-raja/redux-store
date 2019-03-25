@@ -6,36 +6,38 @@ export class Store {
 
   constructor(reducers = {}, initialState = {}) {
     this.reducers = reducers;
-    this.state = initialState;
+    this.state = this.reduce(initialState, {});
+    this.subscribers = [];
   }
 
   get value() {
     return this.state;
   }
 
+  subscribe(fn) {
+    this.subscribers = [...this.subscribers, fn];
+    this.notify();
+    return () => {
+      this.subscribers = this.subscribers.filter(sub => sub != fn)
+    }
+  }
+
   dispatch(action) {
-    debugger;
-    this.reduce(this.state, action);
-    // console.log('11', this.state);
-    // /*
-    // this.state = {
-    //   ...this.state,
-    //   todos: [...this.state.todos, objAction.payload]
-    // };
-    // */
-    // this.state = {
-    //   todos: [...this.state.todos, objAction.payload]
-    // };
-    // console.log('22', this.state);
+    this.state = this.reduce(this.state, action);
+    this.notify();
+  }
+
+  private notify() {
+    this.subscribers.forEach(fn => fn(this.value));
   }
 
   private reduce(state, action) {
     const newState = {};
     for (const prop in this.reducers) {
       // ? newState.todos = this.reducers.todos();
-      newState[prop] = this.reducers[prop](state, action);
+      newState[prop] = this.reducers[prop](state[prop], action);
     }
-    console.log('from reduce', newState);
     return newState;
+
   }
 }
